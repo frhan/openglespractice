@@ -12,17 +12,19 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
+import me.farhan.util.ShaderHelper;
 import me.farhan.util.TextResourceReader;
 import android.content.Context;
 import android.opengl.GLSurfaceView.Renderer;
 
 public class AirHockeyRenderer  implements Renderer{
 
+	public static final String TAG = AirHockeyRenderer.class.getName();
+
 	public static final int POSITION_COMPONENT_COUNT = 2;
 	private static final int BYTES_PER_FLOAT = 4;
 	private final FloatBuffer vertexBuffer;
-	private String vertexShaderString;
-	private String fragmentShaderString;
+
 	private final Context context;
 	float [] tableVerticesWithTriangle = {
 			//Trianle 1
@@ -34,7 +36,7 @@ public class AirHockeyRenderer  implements Renderer{
 			9f,0f,
 			9f,14f
 	};
-	
+
 	float [] tableCentreLine = {
 			//line
 			0f,7f,
@@ -49,12 +51,15 @@ public class AirHockeyRenderer  implements Renderer{
 	{
 		this.context = context;
 		vertexBuffer = ByteBuffer.allocateDirect(tableVerticesWithTriangle.length * BYTES_PER_FLOAT)
-					.order(ByteOrder.nativeOrder())
-					.asFloatBuffer();
+				.order(ByteOrder.nativeOrder())
+				.asFloatBuffer();
 		vertexBuffer.put(tableVerticesWithTriangle);
 
-		vertexShaderString = TextResourceReader.readTextFileFromResource(context, R.raw.simple_vertex_shader);
-		fragmentShaderString = TextResourceReader.readTextFileFromResource(context, R.raw.simple_fragment_shader);
+		final String vertexShaderString = TextResourceReader.readTextFileFromResource(context, R.raw.simple_vertex_shader);
+		final String fragmentShaderString = TextResourceReader.readTextFileFromResource(context, R.raw.simple_fragment_shader);
+
+		int vertexShader = ShaderHelper.compileVertexShader(vertexShaderString);
+		int fragmentShader = ShaderHelper.compileFragmentShader(fragmentShaderString);
 
 	}
 
