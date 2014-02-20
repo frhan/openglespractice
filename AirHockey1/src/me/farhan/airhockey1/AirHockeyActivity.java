@@ -14,6 +14,7 @@ public class AirHockeyActivity extends Activity {
 
 	private GLSurfaceView glSurfaceView;
 	private boolean renderder = false;
+	private Context context;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,6 +23,7 @@ public class AirHockeyActivity extends Activity {
         
         glSurfaceView = new GLSurfaceView(this);
         setContentView(glSurfaceView);
+        context = AirHockeyActivity.this;
         
         final ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
         final ConfigurationInfo configurationInfo = activityManager.getDeviceConfigurationInfo();
@@ -36,7 +38,7 @@ public class AirHockeyActivity extends Activity {
         if(supportsEs2)
         {
         	glSurfaceView.setEGLContextClientVersion(2);
-        	glSurfaceView.setRenderer(new AirHockeyRenderer());        	
+        	glSurfaceView.setRenderer(new AirHockeyRenderer(context));        	
         	renderder = true;
         }else {
 			Toast.makeText(this, "Opengles2 not supported", Toast.LENGTH_LONG).show();
